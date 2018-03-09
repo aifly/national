@@ -54,7 +54,9 @@ $color: #d9eefb;
 	.zmiti-team-btn {
 		z-index: 10;
 		width: 2rem;
-		margin: .1rem auto;
+		@include pos(a);
+		left: 4rem;
+		bottom: 0rem;
 	}
 
 	.zmiti-index-main {

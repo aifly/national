@@ -27,7 +27,7 @@
 		"address": "西藏",
 		"name": "格桑卓嘎",
 		"national": "藏族",
-		"audio": "./assets/music/4.mp3"
+		"audio": "./assets/music/4-1.mp3"
 	}, {
 		"id": "5",
 		"img": "./assets/images/5.jpg",
@@ -195,7 +195,7 @@
 		"address": "云南",
 		"name": "番跃平",
 		"national": "景颇族",
-		"audio": "./assets/music/28.mp3"
+		"audio": "./assets/music/28-1.mp3"
 	}, {
 		"id": "29",
 		"img": "./assets/images/29.jpg",

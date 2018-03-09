@@ -38,8 +38,8 @@ new Vue({
 	el: '#app',
 	/**/
 	template: `<div>
-		<Index  :obserable='obserable'></Index>
-		<Cover  :obserable='obserable'></Cover>
+		<Index v-if='show' :obserable='obserable'></Index>
+		<Cover v-if='show'  :obserable='obserable'></Cover>
 		
 		<div  @touchstart='toggleMusic' class='zmiti-play' :class='{"rotate":rotate}' :style="playStyle">
 			<img  :src='imgs.play2'/>
@@ -56,7 +56,7 @@ new Vue({
 			</div>
 			<img style='position:absolute;z-index:10;' :src="imgs.loading1" alt="" />
 		</div>
-			<audio ref='audio' src='./assets/music/bg.mp3'  loop></audio>
+			<audio ref='audio' src='./assets/music/bg3.mp3'  loop></audio>
 	</div>`,
 	methods: {
 
@@ -122,7 +122,7 @@ new Vue({
 
 		this.isShare = src;
 
-		this.show = true;
+
 
 		this.src = src;
 
@@ -131,6 +131,7 @@ new Vue({
 			this.width = s * 100 | 0;
 
 		}, () => {
+			this.show = true;
 			setTimeout(() => {
 				this.loaded = true;
 			}, 400)

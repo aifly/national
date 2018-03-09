@@ -19,7 +19,8 @@
 							</audio>
 						</div>
 					</div>
-
+					
+					<div :style="{height:'.77rem'}"></div>
 					
 					<div class="zmiti-team-btn" @touchend='showTeam = true'>
 						<img :src="imgs.teamBtn" />
@@ -72,7 +73,6 @@
 	import $ from 'jquery';
 	import Toast from '../toast/toast';
 
-	import IScroll from 'iscroll';
 	export default {
 		props:['obserable','randomPv','pv','totalpv'],
 		name:'zmitiindex',
@@ -238,8 +238,7 @@
 				},200)
 			},
 			loadData(){
-				$.getJSON('./assets/js/data.json',(data)=>{
-					console.log(data);
+				$.getJSON('./assets/js/data.json?t='+new Date().getTime(),(data)=>{
 					this.dataList = data;
 				})
 			}

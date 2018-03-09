@@ -5,9 +5,9 @@ var imgs = {
 	logo: './assets/images/logo.png',
 	pomegranate: './assets/images/pomegranate.png',
 	//title: './assets/images/title.png',
-	cover: './assets/images/cover.jpg',
+	cover: './assets/images/cover1.jpg',
 	team: './assets/images/team.jpg',
-	title1: './assets/images/title2.jpg',
+	title1: './assets/images/title3.jpg',
 	arrow1: './assets/images/arron1.png',
 	imgBg: './assets/images/img-bg.png',
 }
