@@ -1,16 +1,23 @@
 var imgs = {
-	play: './assets/images/play.png',
+	play: './assets/images/play1.png',
+	play2: './assets/images/play.png',
+	teamBtn: './assets/images/team-btn.png',
 	logo: './assets/images/logo.png',
-	bg: './assets/images/bg1.jpg',
-	title1:'./assets/images/title1.jpg',
+	pomegranate: './assets/images/pomegranate.png',
+	//title: './assets/images/title.png',
+	cover: './assets/images/cover.jpg',
+	team: './assets/images/team.jpg',
+	title1: './assets/images/title2.jpg',
 	arrow1: './assets/images/arron1.png',
-	
-
+	imgBg: './assets/images/img-bg.png',
 }
 
 var arr = [];
 for (var attr in imgs) {
 	arr.push(imgs[attr]);
+}
+for (var i = 1; i < 57; i++) {
+	arr.push('./assets/images/' + i + '.jpg');
 }
 var loading = function(arr, fn, fnEnd) {
 	var len = arr.length;

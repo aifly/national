@@ -1,18 +1,66 @@
 <template>
 	<div  class="lt-full zmiti-index-main-ui "  :class="{'show':show}">
 		<div class="zmiti-index-main">
-			<div class="zmiti-index-title1">
-				<img :src="imgs.title1" alt="">
-			</div>
+			<section class="zmiti-list-main-ui lt-full">
+				<div class="zmiti-index-title1">
+					<img :src="imgs.title1" alt="">
 
-			<div class="zmiti-nation-list"></div>
+					<div class="zmiti-audio-btn" :class="{'active':isPress}"  @touchend='choose($event)'>
+						<img :src="imgs.play">
+					</div>
+				</div>
+				<h1></h1>
+				<section>
+					<div class="zmiti-nation-list">
+						<div :class='{"hide":isChoosed && showIdIndex<i,"active":i === iNow}' v-for='(data,i) in dataList' class="zmiti-list-group" @touchend='playAudio(data,i)'>
+							<img :src="data.img" />
+							 <audio :key='i'  ref='audio1'>
+								<source :src='data.audio'  type="audio/mp3" />
+							</audio>
+						</div>
+					</div>
+
+					
+					<div class="zmiti-team-btn" @touchend='showTeam = true'>
+						<img :src="imgs.teamBtn" />
+					</div>
+				</section>
+			</section>
 		</div>
+
+		<div v-if='currentIndex>-1' class="zmiti-dialog-main-ui lt-full">
+			<div @touchend='closeDialog' class="lt-full zmiti-dialog-other"></div>
+			<div class='zmiti-dialog-img-C' >
+				<img :src="imgs.imgBg">
+				<img :src="dataList[currentIndex].img" />
+				<div>
+					<div>{{dataList[currentIndex].address}}</div>
+					<div>
+						<span>{{dataList[currentIndex].name}}</span>
+						<span>{{dataList[currentIndex].national}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
 
 		<div v-if='showMasks' @touchstart='hideMask' class="zmiti-mask" :style="{background: 'url('+imgs.arrow1+') no-repeat center top',backgroundSize:'cover'}">
 			
 		</div>
+		
+			<transition name='team'>
+				<div :key='1' v-show='showTeam' @touchend='showTeam = false' class="zmiti-team lt-full" :style='{background:"url("+imgs.team+") no-repeat center center",backgroundSize:"cover"}'>
+				</div>
+			</transition>
 
-		<Toast :msg='toastMsg'></Toast>
+		
+
+		<audio src='./assets/music/count1.mp3' ref='count'></audio>
+		<audio src='./assets/music/press.mp3' ref='press' loop></audio>
+		
+
+
+
 	</div>
 </template>
 
@@ -31,15 +79,23 @@
 		data(){
 			return{
 				imgs,
-				show:true,
+				show:false,
 				toastMsg:'',
 				showTitle:false,
+				dataList:[],
 				viewW:document.documentElement.clientWidth,
 				showBtns:false,
 				viewH:document.documentElement.clientHeight,
-				
+				isChoosed:true,
+				hideIds:new Array(56),
+				showIdIndex:-1,
 				showMasks:false,
-				
+				iNow:-1,
+				isPress:false,
+				currentIndex:-1,
+				showTeam:false,
+
+				index:-1,
 			
 				src:'',
 			}
@@ -49,48 +105,122 @@
 		},
 		
 		methods:{
-			like(item,index){
-				if(this.commentList[index].isLike){
-					this.toast("您已经点过赞啦~");
-					return;
-				}
-				var s = this;
-
-				 $.ajax({
-                    url: 'http://api.zmiti.com/v2/h5/click_hymn/',
-                    type: 'post',
-                    async: false,
-                    data: {
-                        qid: item.qid,
-                    },
-                    success: function(data) {
-                        //console.log(data,'提交成功');
-                        if (data.getret === 0) {
-                            //列表
-                            s.addIndex = index;
-                            s.getCommentList(()=>{
-                            	s.commentList[index].isLike = true;
-                            });
 
 
 
-                        }
-                    }
-                });
+			playAudio(data,i){
+				var {obserable} = this;
+				obserable.trigger({
+					type:'toggleBgMusic',
+					data:false
+				})
+				
+				this.currentIndex = i;
+				this.$refs['audio1'][i].play();
 			},
+
+			beginChoose(e){
+
+				e.preventDefault();
+
+				var {obserable} = this;
+				obserable.trigger({
+					type:'toggleBgMusic',
+					data:false
+				})
+
+				this.isPress = true;
+				this.isChoosed = true;
+				this.showIdIndex =-1;
+				var pressAudio = this.$refs['press'];
+				pressAudio.play();
+				this.beginChooseTimer =  setInterval(()=>{
+					this.index++;
+				},70)
+
+				return false;
+			},
+
+			play(muted=true,index=this.index){
+				this.$refs['audio1'][this.index].currentTime = 0;
+				this.$refs['audio1'][this.index].muted = muted;
+				this.$refs['audio1'][this.index].play();
+			},
+
+			choose(e){
+				e.preventDefault();
+				var pressAudio = this.$refs['press'];
+				pressAudio.currentTime = 0;
+				pressAudio.pause();
+				this.showIdIndex =-1;
+				this.isChoosed = true;
+				var {obserable} = this;
+				obserable.trigger({
+					type:'toggleBgMusic',
+					data:false
+				})
+
+				this.isPress = false;
+
+				this.index = Math.random()*56|0;
+				this.play(true);
+
+
+				clearInterval(this.beginChooseTimer);
+
+				var countAudio = this.$refs['count'];
+				var t = setInterval(()=>{
+					this.iNow++;
+
+					countAudio.currentTime = 0;
+					countAudio.play();
+
+					if(this.iNow >= this.index){
+						countAudio.currentTime = 0;
+
+						clearInterval(t);
+						///console.log(this.iNow);
+						setTimeout(()=>{
+							countAudio.pause();
+						},10)
+						setTimeout(()=>{
+
+							this.currentIndex = this.iNow;
+
+							setTimeout(()=>{
+								this.play(false);
+							},200)
+						},400)
+					}
+					if(this.iNow>56){
+						this.iNow%=56;
+						this.index%=56;
+					}
+				},100);
+
+
+				return false;
+			},
+ 
+
+
 			toast(msg='提交成功',time=2000){
 				this.toastMsg = msg;
 				setTimeout(()=>{
 					this.toastMsg = '';
 				},time)
 			},
+
+			closeDialog(){
+				if(this.currentIndex>-1){
+					this.$refs['audio1'][this.currentIndex].currentTime= 0;
+					this.$refs['audio1'][this.currentIndex].pause();
+				}
+				this.currentIndex = this.iNow = this.index = -1;
+
+			},
 			
-			openDialog(){
-				this.showDialog = true;
-			},
-			numstart(){
-				//this.num =  1;
-			},
+			
 			hideMask(){
 				
 				this.showMasks = false;
@@ -107,120 +237,37 @@
 					window.location.href = window.location.href.split('?')[0];
 				},200)
 			},
-			afterEnter(){
-				this.showBtns = true;
-			},
-			html2img(){
-				var s = this;
-				var {obserable} = this;
-
-				this.scroll.scrollTo(0,0,0);
-				//document.title = '开始截图....'
-				setTimeout(()=>{
-					this.showLoading = true;
-					var ref = 'zmiti-cache-page';
-					var dom = this.$refs[ref];
-					html2canvas(dom,{
-						useCORS: true,
-						onrendered: function(canvas) {
-					        var url = canvas.toDataURL();
-					        $.ajax({
-					          //url: window.protocol+'//api.zmiti.com/v2/share/base64_image/',
-					          url:window.protocol+'//'+window.server+'.zmiti.com/v2/share/base64_image/',
-					          type: 'post',
-					          data: {
-					            setcontents: url,
-					            setwidth: dom.clientWidth,
-					            setheight:dom.clientHeight
-					          },
-					          success: function(data) {
-					          	//alert('data.getret =>'+data.getret)
-					          	//document.title = '截图成功....'
-					            if (data.getret === 0) {
-					            	//s.deleteImg(dt.img);
-
-					              var src = data.getimageurl;
-					             	
-					             	var img = new Image();
-					             	img.onload = function (argument) {
-					             		// body...
-					             		s.createImg = src;
-					             		s.showBtns = true;
-					             		s.showLoading = false;
-
-					             		setTimeout(()=>{
-					             			//document.title=s.viewH+','+(s.$refs['createimgs'].offsetHeight*1.2)
-											s.$refs['createimgs'].style.WebkitTransform = 'scale('+s.viewH/(s.$refs['createimgs'].offsetHeight*1.2)+')'
-
-										},100)
-					             	};
-					             	img.src =src;
-	
-									var url = window.location.href.split('#')[0];
-
-
-
-									
-
-									url = zmitiUtil.changeURLPar(url,'src',src);
-
-									zmitiUtil.wxConfig(window.zmitiConfig.shareTitle.replace(/{{totalPv}}/ig, s.totalpv),
-							window.zmitiConfig.shareDesc.replace(/{{periods}}/ig, s.periodsUpper[window.zmitiConfig.periods - 1]).replace(/{{pv}}/ig, s.randomPv),url);
-								       
-					            }
-
-					          }
-					        })
-
-					      },
-					      width: dom.clientWidth,
-					      height:dom.clientHeight
-					})
-				},100)
-			},
+			loadData(){
+				$.getJSON('./assets/js/data.json',(data)=>{
+					console.log(data);
+					this.dataList = data;
+				})
+			}
 			
 			
 		},
 		mounted(){
 
+
+			this.loadData();
 			var {obserable} = this;
 
 
-			var a = [];
-
-			for(var i=0;i<56;i++){
-				a.push(i);
-			}
-
-			var b = [];
-			for(var k=0;k<7;k++){
-				b.push(a.concat([]).slice(k*8,(k+1)*8))
-			}
-
-			console.log(b)
-
-
-
 			obserable.on('showIndexApp',(data)=>{
-				this.show = true;
-				if(data){
-					var s = this;
-					this.createImg = data.src;
-					this.src = data.src;
-
-					setTimeout(()=>{
-						this.$refs['createimgs'].style.WebkitTransform = 'scale('+this.viewH/2000+')'
-					},10);
-
-					var url = window.location.href.split('#')[0];
-						url = zmitiUtil.changeURLPar(url,'src',this.src);
-
-						zmitiUtil.wxConfig(window.zmitiConfig.shareTitle.replace(/{{totalPv}}/ig, s.totalpv),
-							window.zmitiConfig.shareDesc.replace(/{{periods}}/ig, this.periodsUpper[window.zmitiConfig.periods - 1]).replace(/{{pv}}/ig, s.randomPv),url);
-				}
+				 this.show = true;
+				 var i = 0;
+				 var t = setInterval(()=>{
+				 	this.showIdIndex = i;
+				 	i++;
+				 	if(i>=56){
+				 		setTimeout(()=>{
+				 			this.showIdIndex = -1;
+				 			this.isChoosed = true;
+				 		},200)
+				 		clearInterval(t);
+				 	}
+				 },40)
 			})
- 
-
 		}
 	}
 </script>

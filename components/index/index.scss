@@ -39,33 +39,205 @@ $baseColor: #fcffb4;
 $viewW: 750px;
 $color: #d9eefb;
 
-.zmiti-index-main-ui{
+.zmiti-index-main-ui {
 	width: 10rem;
-	left: 50%;
-	margin-left: -$viewW/2;
-	background:$color;
-	.zmiti-index-main{
+	//left: 50%;
+	//margin-left: -$viewW/2;
+	background: $color;
+	overflow: hidden;
+	display: none;
+
+	&.show {
+		display: block;
+	}
+
+	.zmiti-team-btn {
+		z-index: 10;
+		width: 2rem;
+		margin: .1rem auto;
+	}
+
+	.zmiti-index-main {
 		@include pos(a);
 		left: 0;
 		top: 0;
-		width: 100%;
+		width: 10rem;
 		height: 100%;
-		@include displayBox(vertical);
-		.zmiti-nation-list{
-			-webkit-box-flex:1;
-			border:1px solid red;
-			width: 10rem;
-			box-sizing: border-box;
+		//@include displayBox(vertical);
+
+		.zmiti-list-main-ui {
+			@include displayBox(vertical);
+
+			&>h1 {
+				height: 320px;
+				width: 100%;
+				@include pos(r);
+				z-index: 10;
+			}
+
+			&>section {
+				-webkit-box-flex: 1;
+				box-sizing: border-box;
+				width: 100%;
+				@include pos(r);
+				z-index: 15;
+				@include displayBox(vertical);
+			}
+
 		}
+
+		.zmiti-index-title1 {
+			@include pos(a);
+			z-index: 12;
+
+			&:before {
+				content: '';
+				@include pos(a);
+				width: 100%;
+				height: 100%;
+				left: 0;
+				top: 0;
+				z-index: 1;
+			}
+
+		}
+
+		.zmiti-audio-btn {
+			width: .8rem;
+			top: 260px;
+			@include pos(a);
+			left: 7rem;
+			z-index: 2;
+			@include transition(.2s);
+			@include animation(tada 2s linear infinite alternate);
+
+			&:before {
+				content: '';
+				@include pos(a);
+				width: 100%;
+				height: 100%;
+				left: 0;
+				top: 0;
+				@include br();
+				//background: red;
+				z-index: 10;
+			}
+
+			&.active {
+				@include transform(scale(.8));
+			}
+
+		}
+
+		@at-root.zmiti-team {
+			z-index: 1000;
+			opacity: 1;
+
+			&.team-enter-active, &.team-leave-active {
+				@include transition(.4s);
+			}
+
+			&.team-enter, &.team-leave-to {
+				opacity: 0;
+			}
+
+		}
+
+		.zmiti-nation-list {
+			bottom: 1rem;
+			left: .2rem;
+			z-index: 3;
+			//-webkit-box-flex: 1;
+			$height: 65vh;
+			width: 9.6rem;
+			height: $height;
+			box-sizing: border-box;
+			margin: 0 auto;
+			overflow: hidden;
+
+			.zmiti-list-group {
+				width: 1rem;
+				margin: .02rem 0.1rem;
+				display: inline-block;
+				font-size: 0;
+				box-sizing: border-box;
+				height: $height/7.2;
+				overflow: hidden;
+				float: left;
+				@include displayBox(horizontal);
+				@include transition(.1s);
+
+				img {
+					display: block;
+					-webkit-user-select: none;
+				}
+
+				&.hide {
+					opacity: .3;
+				}
+
+				&.active {
+					opacity: 1;
+				}
+
+			}
+
+		}
+
+		@at-root.zmiti-dialog-main-ui {
+			z-index: 1001;
+
+			.zmiti-dialog-other {
+				z-index: 10;
+			}
+
+			.zmiti-dialog-img-C {
+				@include pos(a);
+				z-index: 12;
+				width: 7rem;
+				left: 1.5rem;
+				bottom: .3rem;
+
+				img {
+					&:nth-of-type(2) {
+						@include pos(a);
+						width: 80%;
+						top: 5%;
+						left: 10%;
+					}
+
+				}
+
+				&>div {
+					color: #fff;
+					@include pos(a);
+					bottom: 0rem;
+					height: 12vh;
+					@include displayBox(vertical);
+					width: 10rem;
+					text-align: center;
+					left: 50%;
+					font-size: .45rem;
+					@include transform(translate3d(-50%, 0, 0));
+
+					span {
+						margin: 0 20px;
+						display: inline-block;
+					}
+
+				}
+
+			}
+
+		}
+
 	}
+
 }
-
-
-
 
 .zmiti-loading {
 	z-index: 1000;
-	@include transform(scale(1.2));
+	//@include transform(scale(1.2));
 	@include pos(f);
 
 	.zmiti-loading-ui {
@@ -346,7 +518,7 @@ $color: #d9eefb;
 }
 
 .zmiti-play {
-	top: 2rem !important;
+	//top: 2rem !important;
 }
 
 .zmiti-mask {

@@ -1,0 +1,69 @@
+﻿@import "../css/base.scss";
+$baseColor: #fcffb4;
+$viewW: 750px;
+$color: #d9eefb;
+
+.zmiti-cover-main-ui {
+	width: 10rem;
+	z-index: 4;
+
+	.zmiti-title {
+		@include pos(a);
+		top: 60vh;
+		width: 1rem;
+		left: 6.4rem;
+		@include animation(scale .8s linear infinite alternate);
+	}
+
+	.zmiti-pomegranate {
+		@include pos(a);
+		width: 3rem;
+		top: 55vh;
+		left: 2.4rem;
+		@include animation(tada 2s linear infinite alternate);
+	}
+
+	opacity: 0;
+	z-index: -1;
+	@include transition(1s);
+
+	&.show {
+		opacity: 1;
+		z-index: 205;
+	}
+
+}
+
+@-webkit-keyframes tada {
+	0% {
+		transform: scaleX(1)
+	}
+
+	10%, 20% {
+		transform: scale3d(.93, .93, .93) rotate(-3deg)
+	}
+
+	30%, 50%, 70%, 90% {
+		transform: scale3d(1.04, 1.04, 1.04) rotate(3deg)
+	}
+
+	40%, 60%, 80% {
+		transform: scale3d(1.04, 1.04, 1.04) rotate(-3deg)
+	}
+
+	to {
+		transform: scaleX(1)
+	}
+
+}
+
+@-webkit-keyframes scale {
+	from {
+		@include transform(scale(.8));
+	}
+
+	to {
+		@include transform(scale(1.2));
+	}
+
+}

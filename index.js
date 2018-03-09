@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Index from './components/index/index';
+import Cover from './components/cover/index';
 import Obserable from './components/lib/obserable';
 import imgs from './components/lib/assets'
 import zmitiUtil from './components/lib/util.js'
@@ -35,12 +36,13 @@ new Vue({
 		}
 	},
 	el: '#app',
-	/*<audio ref='audio' src='./assets/music/bg.mp3'  loop></audio>*/
+	/**/
 	template: `<div>
-		<Index :pv="pv" :totalpv='totalpv' :randomPv='randomPv' :obserable='obserable'></Index>
+		<Index  :obserable='obserable'></Index>
+		<Cover  :obserable='obserable'></Cover>
 		
-		<div hidden @click='toggleMusic' class='zmiti-play' :class='{"rotate":rotate}' :style="playStyle">
-			<img  :src='imgs.play'/>
+		<div  @touchstart='toggleMusic' class='zmiti-play' :class='{"rotate":rotate}' :style="playStyle">
+			<img  :src='imgs.play2'/>
 		</div>
 		<div  v-if='!loaded' :style='{background:"#158ae4"}' class='zmiti-loading lt-full'>
 			<div class='zmiti-loading-ui'>
@@ -54,6 +56,7 @@ new Vue({
 			</div>
 			<img style='position:absolute;z-index:10;' :src="imgs.loading1" alt="" />
 		</div>
+			<audio ref='audio' src='./assets/music/bg.mp3'  loop></audio>
 	</div>`,
 	methods: {
 
@@ -83,62 +86,34 @@ new Vue({
 		},
 		toggleMusic() {
 			var music = this.$refs['audio'];
-			music[music.paused ? 'play' : 'pause']()
+			obserable.trigger({
+				type: 'toggleBgMusic',
+				data: !this.rotate
+			});
+			/*var music = this.$refs['audio'];
+			music[music.paused ? 'play' : 'pause']()*/
 		},
+
 		updatePv() {
 
 			$.ajax({
 				url: window.protocol + '//api.zmiti.com/v2/custom/update_pvnum/',
 				type: 'post',
 				data: {
-					customid: window.zmitiConfig.customid
+					customid: 44
 				}
 			}).done((data) => {
 				if (data.getret === 0) {
 					this.pv = data.totalpv;
 					this.randomPv = data.randtotalpv;
 					var totalpv = this.randomPv;
-
-					this.totalpv = totalpv;
-					var i = 0;
-					window.zmitiConfig.prevCustomIds = window.zmitiConfig.prevCustomIds || [];
-					window.zmitiConfig.prevCustomIds.forEach((customid) => {
-						$.ajax({
-							url: window.protocol + '//api.zmiti.com/v2/custom/get_customdetial/',
-							type: 'post',
-							data: {
-								customid: customid,
-							}
-
-						}).done((data) => {
-							if (data.getret === 0) {
-								//console.log(data);
-								totalpv += data.detial.rtotalpv;
-								i++;
-								if (i >= window.zmitiConfig.prevCustomIds.length) {
-									//console.log(totalpv)
-									zmitiUtil.wxConfig(window.zmitiConfig.shareTitle.replace(/{{totalPv}}/ig, totalpv),
-										window.zmitiConfig.shareDesc.replace(/{{periods}}/ig, this.periodsUpper[window.zmitiConfig.periods - 1]).replace(/{{pv}}/ig, this.randomPv));
-								}
-
-							}
-						})
-					});
-
-					if (window.zmitiConfig.prevCustomIds.length <= 0) {
-						zmitiUtil.wxConfig(window.zmitiConfig.shareTitle.replace(/{{totalPv}}/ig, totalpv),
-							window.zmitiConfig.shareDesc.replace(/{{periods}}/ig, this.periodsUpper[window.zmitiConfig.periods - 1]).replace(/{{pv}}/ig, this.randomPv));
-					}
-
-
-
 				}
 			});
 		}
 	},
 	components: {
 		Index,
-
+		Cover
 	},
 	mounted() {
 
@@ -156,9 +131,9 @@ new Vue({
 			this.width = s * 100 | 0;
 
 		}, () => {
-			this.loaded = true;
-
-
+			setTimeout(() => {
+				this.loaded = true;
+			}, 400)
 		})
 
 		obserable.on('showShare', () => {
@@ -171,30 +146,86 @@ new Vue({
 			this.playStyle = data;
 
 		});
-		/*
-				$(this.$refs['audio']).on('play', () => {
+
+
+		$(this.$refs['audio']).on('play', () => {
+			this.rotate = true;
+		}).on('pause', () => {
+			this.rotate = false;
+		});
+
+		//this.$refs['audio'].volume = .3;
+		this.$refs['audio'].play();
+		var s = this;
+		document.addEventListener("WeixinJSBridgeReady", function() {
+			WeixinJSBridge.invoke('getNetworkType', {}, function(e) {
+				s.$refs['audio'].play();
+			});
+		}, false)
+
+
+		var audio = this.$refs['audio'];
+		var play = function() {
+			document.removeEventListener("WeixinJSBridgeReady", play);
+			document.removeEventListener("YixinJSBridgeReady", play);
+			audio.play();
+		};
+
+		audio.play();
+		if (window.WeixinJSBridge) {
+			audio.play();
+		}
+		//weixin
+		if (typeof WeixinJSBridge == "undefined") {
+			document.addEventListener("WeixinJSBridgeReady", play, false);
+		} else {
+			//yixin
+			document.addEventListener('YixinJSBridgeReady', play, false);
+			audio.play();
+		}
+
+		obserable.on('toggleBgMusic', (data) => {
+			var volume = 1;
+			if (data) { //play
+				volume = 0;
+			}
+			clearInterval(this.audioTimer);
+			var audio = this.$refs['audio'];
+			audio[data ? 'play' : 'pause']();
+			return;
+			console.log(data);
+			this.audioTimer = setInterval(() => {
+
+				if (data) {
 					this.rotate = true;
-				}).on('pause', () => {
-					this.rotate = false;
-				});
+					volume += 0.01;
+					if (volume >= 1) {
+						volume = 1;
+						clearInterval(this.audioTimer);
+						//audio.play();
+					}
+				} else {
+					volume -= .01;
+					if (volume <= 0) {
+						volume = 0;
+						this.rotate = false;
+						clearInterval(this.audioTimer)
+						//audio.pause();
+					}
+				}
+				//console.log(volume)
 
+				//document.title = volume.toFixed(1) * 1;
 
+				//audio.volume = volume.toFixed(1) * 1;
 
-
-				this.$refs['audio'].volume = .3;
-				this.$refs['audio'].play();
-				var s = this;
-				document.addEventListener("WeixinJSBridgeReady", function() {
-					WeixinJSBridge.invoke('getNetworkType', {}, function(e) {
-						s.$refs['audio'].play();
-					});
-				}, false)
-
-				obserable.on('toggleBgMusic', (data) => {
-					this.$refs['audio'][data ? 'play' : 'pause']();
-				});*/
+			}, 20)
+		});
 
 		this.updatePv();
+
+
+		zmitiUtil.wxConfig(document.title, window.desc);
 
 		if (this.isShare) {
 			setTimeout(() => {
