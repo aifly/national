@@ -5,7 +5,7 @@ var imgs = {
 	logo: './assets/images/logo.png',
 	pomegranate: './assets/images/pomegranate.png',
 	//title: './assets/images/title.png',
-	cover: './assets/images/cover1.jpg',
+	cover: './assets/images/cover3.jpg',
 	team: './assets/images/team.jpg',
 	title1: './assets/images/title3.jpg',
 	arrow1: './assets/images/arron1.png',

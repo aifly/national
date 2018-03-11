@@ -1,5 +1,5 @@
 <template>
-	<div v-tap='entry' v-swipe='entry' :style="{background:'url('+imgs.cover+') no-repeat center center',backgroundSize:'cover'}" class="lt-full zmiti-cover-main-ui "  :class="{'show':show}">
+	<div v-tap='entry' v-swipe='entry' :style="{background:'url('+imgs.cover+') no-repeat center center',backgroundSize:'cover',height:viewH+'px',width:viewW+'px',position:'fixed'}" class="lt-full zmiti-cover-main-ui "  :class="{'show':show}">
 
 		<div class="zmit">
 			

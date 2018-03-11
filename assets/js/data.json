@@ -10,7 +10,7 @@
 	}, {
 		"id": "2",
 		"img": "./assets/images/2.jpg",
-		"address": "内蒙",
+		"address": "内蒙古",
 		"name": "吴云波",
 		"national": "蒙古族",
 		"audio": "./assets/music/2.mp3"
@@ -202,7 +202,7 @@
 		"address": "新疆",
 		"name": "迪力夏提·柯德尔汗",
 		"national": "柯尔克孜族",
-		"audio": "./assets/music/29.mp3"
+		"audio": "./assets/music/29-2.mp3"
 	}, {
 		"id": "30",
 		"img": "./assets/images/30.jpg",
@@ -272,7 +272,7 @@
 		"address": "云南",
 		"name": "张益俊",
 		"national": "阿昌族",
-		"audio": "./assets/music/39.mp3"
+		"audio": "./assets/music/39-1.mp3"
 	}, {
 		"id": "40",
 		"img": "./assets/images/40.jpg",
@@ -311,7 +311,7 @@
 	}, {
 		"id": "45",
 		"img": "./assets/images/45.jpg",
-		"address": "内蒙",
+		"address": "内蒙古",
 		"name": "梅花",
 		"national": "鄂温克族",
 		"audio": "./assets/music/45.mp3"
@@ -321,7 +321,7 @@
 		"address": "云南",
 		"name": "线晓云",
 		"national": "德昂族",
-		"audio": "./assets/music/46.mp3"
+		"audio": "./assets/music/46-1.mp3"
 	}, {
 		"id": "47",
 		"img": "./assets/images/47.jpg",

@@ -56,7 +56,7 @@ new Vue({
 			</div>
 			<img style='position:absolute;z-index:10;' :src="imgs.loading1" alt="" />
 		</div>
-			<audio ref='audio' src='./assets/music/bg3.mp3'  loop></audio>
+			<audio ref='audio' src='./assets/music/bg4.mp3'  loop></audio>
 	</div>`,
 	methods: {
 

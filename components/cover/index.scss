@@ -9,17 +9,17 @@ $color: #d9eefb;
 
 	.zmiti-title {
 		@include pos(a);
-		top: 60vh;
+		top: 66vh;
 		width: 1rem;
-		left: 6.4rem;
+		left: 6.2rem;
 		@include animation(scale .8s linear infinite alternate);
 	}
 
 	.zmiti-pomegranate {
 		@include pos(a);
 		width: 3rem;
-		top: 55vh;
-		left: 2.4rem;
+		top: 63vh;
+		left: 2.2rem;
 		@include animation(tada 2s linear infinite alternate);
 	}
 

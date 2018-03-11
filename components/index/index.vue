@@ -1,5 +1,5 @@
 <template>
-	<div  class="lt-full zmiti-index-main-ui "  :class="{'show':show}">
+	<div  class="lt-full zmiti-index-main-ui " :style="{height:viewH+'px',width:viewW+'px',position:'fixed'}"  :class="{'show':show}">
 		<div class="zmiti-index-main">
 			<section class="zmiti-list-main-ui lt-full">
 				<div class="zmiti-index-title1">
