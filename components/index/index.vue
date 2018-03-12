@@ -22,8 +22,14 @@
 					
 					<div :style="{height:'.77rem'}"></div>
 					
-					<div class="zmiti-team-btn" @touchend='showTeam = true'>
-						<img :src="imgs.teamBtn" />
+					<div class="zmiti-team-btn zmiti-team-btn1" :class="{'hide':currentIndex>-1}" @touchend='showTeam = true'>
+						<img :src="imgs.btnBg" />
+						<span>制作团队</span>
+					</div>
+
+					<div class="zmiti-team-btn zmiti-back" :class="{'hide':currentIndex>-1}" @touchend='exit'>
+						<img :src="imgs.btnBg" />
+						<span>返回</span>
 					</div>
 				</section>
 			</section>
@@ -41,6 +47,16 @@
 						<span>{{dataList[currentIndex].national}}</span>
 					</div>
 				</div>
+
+				<section class="zmiti-close" @touchend='closeDialog'>
+					<img :src="imgs.close">
+					<span>返回</span>
+				</section>
+
+				<section class="zmiti-reload" @touchend='reload'>
+					<img :src="imgs.reload">
+					<span>重听</span>
+				</section>
 			</div>
 		</div>
 
@@ -58,9 +74,6 @@
 
 		<audio src='./assets/music/count1.mp3' ref='count'></audio>
 		<audio src='./assets/music/press.mp3' ref='press' loop></audio>
-		
-
-
 
 	</div>
 </template>
@@ -106,6 +119,13 @@
 		
 		methods:{
 
+
+			exit(){
+				var {obserable} = this;
+				obserable.trigger({
+					type:"exit"
+				})
+			},
 
 
 			playAudio(data,i){
@@ -219,6 +239,13 @@
 				this.currentIndex = this.iNow = this.index = -1;
 
 			},
+
+			reload(){
+				if(this.currentIndex>-1){
+					this.$refs['audio1'][this.currentIndex].currentTime= 0;
+					this.$refs['audio1'][this.currentIndex].play();
+				}
+			},
 			
 			
 			hideMask(){
@@ -240,6 +267,7 @@
 			loadData(){
 				$.getJSON('./assets/js/data.json?t='+new Date().getTime(),(data)=>{
 					this.dataList = data;
+
 				})
 			}
 			
@@ -253,7 +281,7 @@
 
 
 			obserable.on('showIndexApp',(data)=>{
-				 this.show = true;
+				 this.show = data;
 				 var i = 0;
 				 var t = setInterval(()=>{
 				 	this.showIdIndex = i;

@@ -52,7 +52,8 @@
 			entry(){
 				var {obserable} = this;
 				obserable.trigger({
-					type:'showIndexApp'
+					type:'showIndexApp',
+					data:true
 				})
 				this.show =false;	
 				setTimeout(()=>{
@@ -72,6 +73,26 @@
 		mounted(){
 
 
+			var {obserable} = this;
+			obserable.on('exit',()=>{
+				obserable.trigger({
+					type:'showIndexApp',
+					data:false
+				})
+
+				this.show = true;
+
+				setTimeout(()=>{
+					obserable.trigger({
+						type:'setPlay',
+						data:{
+							top:'.5rem'
+						}
+					})
+				},400)
+			})
+
+			
 			
  
 

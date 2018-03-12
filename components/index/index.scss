@@ -55,8 +55,37 @@ $color: #d9eefb;
 		z-index: 10;
 		width: 2rem;
 		@include pos(a);
-		left: 4rem;
+		left: 2rem;
 		bottom: 0rem;
+
+		span {
+			@include pos(a);
+			width: 100%;
+			height: 100%;
+			left: 0;
+			top: 0;
+			text-align: center;
+			line-height: .8rem;
+			color: #333;
+			font-size: .4rem;
+		}
+
+	}
+
+	.zmiti-team-btn1 {
+		&.hide {
+			left: 4rem;
+		}
+
+	}
+
+	.zmiti-back {
+		left: 6rem;
+
+		&.hide {
+			display: none;
+		}
+
 	}
 
 	.zmiti-index-main {
@@ -235,6 +264,30 @@ $color: #d9eefb;
 
 	}
 
+}
+
+.zmiti-close, .zmiti-reload {
+	@include pos(a);
+	color: #fff;
+	left: .1rem;
+	bottom: .1rem;
+	font-size: 22px;
+
+	img {
+		width: .5rem;
+		vertical-align: middle;
+	}
+
+	span {
+		@include pos(r);
+		top: 3px;
+	}
+
+}
+
+.zmiti-reload {
+	left: auto;
+	right: .1rem;
 }
 
 .zmiti-loading {
